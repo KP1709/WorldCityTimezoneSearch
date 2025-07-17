@@ -1,6 +1,5 @@
 # World City Timezone Explorer
-[![Netlify Status](https://api.netlify.com/api/v1/badges/e9459f77-cbc1-4611-863a-dd6001edb9db/deploy-status)](https://app.netlify.com/projects/kareenapatel-worldcitytimezoneexplore/deploys)
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e4773565-55c5-4bbb-b02a-beadf6be9d63/deploy-status)](https://app.netlify.com/projects/kareenapatel-worldcitytimezonesearch/deploys)
 
 ## ⌨️ Tech stack
 React / Typescript / CSS / pnpm / Luxon / React Leaflet / Supabase
