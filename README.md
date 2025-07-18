@@ -1,11 +1,11 @@
-# World City Timezone Explorer
+# World City Timezone Search
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e4773565-55c5-4bbb-b02a-beadf6be9d63/deploy-status)](https://app.netlify.com/projects/kareenapatel-worldcitytimezonesearch/deploys)
 
 ## ⌨️ Tech stack
 React / Typescript / CSS / pnpm / Luxon / React Leaflet / Supabase
 
 ## 🍼 Introduction
-After completing a technical debt story where there were inconsistencies with time formats in the company's web application, I was interested in looking further into basic handling of date and times. This tool enables users to search for a city in the world and see the date and time information for it. This includes where it is located and places a marker on the map as well. It was also a great opportunity to explore using React Leaflet, Luxon and Supabase. Supabase was able to do the heavy-lifting when completing search queries.
+After completing a technical debt story where there were inconsistencies with time formats in my company's web application, I was interested in looking further into basic handling of dates and times. This tool enables users to search for a city in the world and see the date and time information for it. This includes where it is located and places a marker on the map as well. It was also a great opportunity to explore React Leaflet, Luxon and Supabase. Supabase does the heavy lifting when searching for world cities.
 
 ## 🛠️ Features
 - Search for world cities through querying the Supabase database
