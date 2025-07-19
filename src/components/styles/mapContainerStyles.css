@@ -11,6 +11,7 @@
     background-color: #b0c4de;
     border: 2px solid #000;
     border-radius: 0.5em;
+    cursor: pointer;
 }
 
 #recentre-btn-sm {
