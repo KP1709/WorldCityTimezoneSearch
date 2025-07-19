@@ -84,7 +84,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     };
 
     return (
-        <div id='search-bar' className='search-container' style={{ width: currentBreakpoint <= 500 ? '80%' : '300px' }}>
+        <div id='search-bar' className='search-container' style={{ width: currentBreakpoint <= 500 ? '75%' : '300px' }}>
 
             <label htmlFor="worldCitySearch">
                 World City Search
