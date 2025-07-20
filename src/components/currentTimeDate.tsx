@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { DateTime } from 'luxon'
 
-interface ClockProps {
-    timezone?: string
+interface TimeDateProps {
+    timezone?: string;
+    time?: boolean;
 }
 
-const Clock: React.FC<ClockProps> = ({ timezone }) => {
+export const TimeDate: React.FC<TimeDateProps> = ({ timezone, time = true }) => {
     const [calculatedTimezone, setCalculatedTimezone] = useState<string | undefined>(undefined)
-    const [time, setTime] = useState<DateTime>(DateTime.now())
+    const [timeDate, setTimeDate] = useState<DateTime>(DateTime.now())
 
     useEffect(() => {
         const updateTimezone = async () => {
@@ -25,17 +26,20 @@ const Clock: React.FC<ClockProps> = ({ timezone }) => {
     useEffect(() => {
         if (!calculatedTimezone) return
 
-        const updateTime = () => {
-            setTime(DateTime.now().setZone(calculatedTimezone))
+        const updateTimeDate = () => {
+            setTimeDate(DateTime.now().setZone(calculatedTimezone))
         };
 
-        updateTime()
-        const interval = setInterval(updateTime, 1000)
+        updateTimeDate()
+        const interval = setInterval(updateTimeDate, 1000)
 
         return () => clearInterval(interval)
     }, [calculatedTimezone])
 
-    return <>{calculatedTimezone ? time.toFormat('HH:mm') : 'Loading...'}</>
-};
+    if (time) {
+        return <>{calculatedTimezone ? timeDate.toFormat('HH:mm') : 'Loading...'}</>
+    }
 
-export default Clock;
+    return <>{calculatedTimezone ? timeDate.toFormat('DDD') : 'Loading...'}</>
+
+};
