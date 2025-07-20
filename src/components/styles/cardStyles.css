@@ -37,6 +37,7 @@
     color: #2e3a59;
     font-size: 1.5rem;
     font-weight: bold;
+    display: flex;
 }
 
 #date,
@@ -76,4 +77,36 @@
     grid-row: 7;
     grid-column: 1 / -1;
     margin-top: 10px;
+}
+
+#clock svg {
+    --size: 10px;
+    width: var(--size);
+    height: var(--size);
+    margin-top: 5px;
+    margin-left: 5px;
+    fill: #ff0000;
+    border-radius: 50%;
+    ;
+
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 1);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
 }

@@ -14,7 +14,11 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
 
     return (
         <div id='main-card'>
-            <span id="clock"><Clock timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}</span>
+            <span id="clock"><Clock timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
+                    <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
+                </svg>
+            </span>
             <span id='date'> {DateTime.now().setZone(markerTimeData?.zoneName).toFormat('DDD') ?? null}</span>
             <span id='timezone-id'>{DateTime.now().setZone(markerTimeData?.zoneName).toFormat('ZZZZZ') ?? null}</span>
             <span id='timezone-name'>{markerTimeData?.zoneName}</span>
