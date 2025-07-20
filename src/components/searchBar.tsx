@@ -77,12 +77,6 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
         }
     };
 
-    const handleFocus = () => {
-        if (inputRef.current) {
-            inputRef.current.select()
-        }
-    };
-
     return (
         <div id='search-bar' className='search-container' style={{ width: currentBreakpoint <= 500 ? '75%' : '300px' }}>
 
@@ -95,7 +89,6 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
                     value={query}
                     onChange={(e) => { setQuery(e.target.value); setSelected(null); }}
                     onKeyDown={handleKeyDown}
-                    onFocus={handleFocus}
                     ref={inputRef}
                     className='search-input'
                 />
