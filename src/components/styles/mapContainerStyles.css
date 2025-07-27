@@ -4,10 +4,20 @@
     top: 0;
     height: 100vh;
     width: 100%;
-    background-color: #AAD3DF;
 }
 
-.recentre-btn {
+.light {
+    background-color: #AAD3DF;
+    filter: none
+}
+
+.dark {
+    background-color: #000;
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.recentre-btn,
+.theme-btn {
     position: absolute;
     background-color: #b0c4de;
     border: 2px solid #000;
@@ -16,12 +26,24 @@
 }
 
 #recentre-btn-sm {
-    top: 32px;
+    top: 90px;
     right: 10px;
     padding: 0.2em 1em;
 }
 
 #recentre-btn-lg {
+    top: 15px;
+    right: 125px;
+    padding: 0.5em 1em;
+}
+
+#theme-btn-sm {
+    top: 32px;
+    right: 10px;
+    padding: 0.2em 1em;
+}
+
+#theme-btn-lg {
     top: 15px;
     right: 60px;
     padding: 0.5em 1em;

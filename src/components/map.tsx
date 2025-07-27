@@ -6,7 +6,9 @@ import useBreakpoint from '../hooks/useBreakpoint';
 import L from 'leaflet';
 import customMarker from '../assets/map-pin-fill.svg'
 import gpsFix from '../assets/gps-fix.png'
-import { RecentreContext, type RecentreContextType } from '../App';
+import lightTheme from '../assets/sun.svg'
+import darkTheme from '../assets/moon.svg'
+import { DarkModeContext, RecentreContext, type DarkModeContextType, type RecentreContextType } from '../App';
 
 export const RecentreButton = () => {
     const currentBreakpoint = useBreakpoint();
@@ -15,6 +17,24 @@ export const RecentreButton = () => {
     return (
         <button id={currentBreakpoint <= 500 ? 'recentre-btn-sm' : 'recentre-btn-lg'} className='recentre-btn' onClick={() => setRecentre(!recentre)}>
             <img src={gpsFix} alt='Recentre Map' />
+        </button>
+    )
+}
+
+export const ThemeToggleButton = () => {
+    const currentBreakpoint = useBreakpoint();
+    const { darkMode, setDarkMode } = useContext(DarkModeContext) as DarkModeContextType;
+
+    useEffect(() => {
+        sessionStorage.setItem('WorldMapDarkMode', String(darkMode));
+    }, [darkMode])
+
+    return (
+        <button
+            id={currentBreakpoint <= 500 ? 'theme-btn-sm' : 'theme-btn-lg'}
+            className='theme-btn'
+            onClick={() => { setDarkMode(!darkMode), window.location.reload() }}>
+            <img src={darkMode ? lightTheme : darkTheme} alt='Change dark/light mode' />
         </button>
     )
 }
@@ -54,31 +74,28 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
         }
     }, [markerPosition, map, recentre]);
 
-    return <>
-        <Marker position={markerPosition} icon={customIcon}></Marker>
-    </>
+    return <Marker position={markerPosition} icon={customIcon}></Marker>
 };
 
 export default function Map({ chosenCity }: { chosenCity?: CitiesType | undefined }) {
     const currentBreakpoint = useBreakpoint();
+    const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
 
     return (
-        <span >
-            <MapContainer id='map-container'
-                center={[40, -0.09]}
-                zoom={2}
-                minZoom={2}
-                scrollWheelZoom={true}
-                zoomControl={false}
+        <MapContainer id='map-container' className={darkMode ? 'dark' : 'light'}
+            center={[40, -0.09]}
+            zoom={2}
+            minZoom={2}
+            scrollWheelZoom={true}
+            zoomControl={false}
 
-            >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                {currentBreakpoint >= 500 && <ZoomControl position={'topright'} />}
-                {chosenCity && <FollowMarker markerPosition={[chosenCity?.lat!, chosenCity?.lng!]} />}
-            </MapContainer>
-        </span>
+        >
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {currentBreakpoint >= 500 && <ZoomControl position={'topright'} />}
+            {chosenCity && <FollowMarker markerPosition={[chosenCity?.lat!, chosenCity?.lng!]} />}
+        </MapContainer>
     );
 }
