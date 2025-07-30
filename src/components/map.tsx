@@ -21,7 +21,7 @@ export const RecentreButton = () => {
     )
 }
 
-export const ThemeToggleButton = () => {
+export const ThemeToggleButton = ({ setReloadRequired }: { setReloadRequired: (value: boolean) => void }) => {
     const currentBreakpoint = useBreakpoint();
     const { darkMode, setDarkMode } = useContext(DarkModeContext) as DarkModeContextType;
 
@@ -33,7 +33,7 @@ export const ThemeToggleButton = () => {
         <button
             id={currentBreakpoint <= 500 ? 'theme-btn-sm' : 'theme-btn-lg'}
             className='theme-btn'
-            onClick={() => { setDarkMode(!darkMode), window.location.reload() }}>
+            onClick={() => { setDarkMode(!darkMode), setReloadRequired(true) }}>
             <img src={darkMode ? lightTheme : darkTheme} alt='Change dark/light mode' />
         </button>
     )

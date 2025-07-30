@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import type { CitiesType } from "../types";
 import useDebounce from "../hooks/useDebounce";
 import "../components/styles/searchBarStyles.css"
 import { supabase } from "../hooks/getCityListData";
 import useBreakpoint from "../hooks/useBreakpoint";
+import { DarkModeContext, type DarkModeContextType } from "../App";
 
 
 interface SearchBarProps {
@@ -16,6 +17,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     const [selected, setSelected] = useState<CitiesType | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
+    const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
 
     const inputRef = useRef<HTMLInputElement>(null);
     const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -80,7 +82,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     return (
         <div id='search-bar' className='search-container' style={{ width: currentBreakpoint <= 500 ? '75%' : '300px' }}>
 
-            <label htmlFor="worldCitySearch">
+            <label htmlFor="worldCitySearch" className={darkMode ? 'search-label-dark' : ''}>
                 World City Search
                 <input
                     id="worldCitySearch"
