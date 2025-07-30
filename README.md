@@ -17,6 +17,8 @@ After completing a technical debt story where there were inconsistencies with ti
     - Shows date, timezone, timezone id and location
 - Displays main flag for the country the city is in
     - Shows second flag if a region or state does have one
+- Light/Dark mode overlay on map
+    - Requires reloading because of how React-leaflet works
 
 ## 📚 Resources
 - How to find a key from a value (Peter Morgan) - https://petermorgan.dev/blog/find-a-values-key-in-a-javascript-object/
@@ -29,7 +31,6 @@ After completing a technical debt story where there were inconsistencies with ti
 - World city data - https://simplemaps.com/data/world-cities
 
 ## ➕ Additional features to add
-- Light mode / dark mode overlay on map
 - Think of better way to present the time data
 - Add ability to tap map to add marker and display time date information
 - Filter search by country 
