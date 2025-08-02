@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import { DateTime } from "luxon";
 import { TimeDate } from "./currentTimeDate";
 import type { CitiesType, TimeZoneType } from "../types";
@@ -6,7 +7,7 @@ import '../components/styles/cardStyles.css'
 import useBreakpoint from "../hooks/useBreakpoint";
 import FlagImage from "./flagImage";
 import { getFlagImage } from "../hooks/getFlagImage";
-import { useState } from "react";
+import { CardExpandedContext, type CardExpandedContextType } from "../App";
 
 function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, setIsExpanded: (value: boolean) => void }) {
     return (
@@ -26,17 +27,17 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
     const { flags } = getFlagImage({ markerTimeData });
     const { mainFlag, secondaryFlag } = flags
     const currentBreakpoint = useBreakpoint()
+    const { isCardExpanded, setIsCardExpanded } = useContext(CardExpandedContext) as CardExpandedContextType
 
     const [isSmallScreen] = useState(() => {
         if (currentBreakpoint < 500) return true
         else return false
     })
-    const [isExpanded, setIsExpanded] = useState(false)
 
-    if (currentBreakpoint < 500 && !isExpanded) {
+    if (currentBreakpoint < 500 && !isCardExpanded) {
         return (
             <div id='main-card' className='small' style={{ height: '100px' }}>
-                {isSmallScreen && <ToggleCardButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} />}
+                {isSmallScreen && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
                 <span id="clock"><TimeDate timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
@@ -50,7 +51,7 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
 
     return (
         <div id='main-card' className='large' style={{ height: '275px' }}>
-            {isExpanded && <ToggleCardButton isExpanded={isExpanded} setIsExpanded={setIsExpanded} />}
+            {isCardExpanded && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
 
             <span id="clock"><TimeDate timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">

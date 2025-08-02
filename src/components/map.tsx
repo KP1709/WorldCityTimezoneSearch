@@ -8,7 +8,7 @@ import customMarker from '../assets/map-pin-fill.svg'
 import gpsFix from '../assets/gps-fix.png'
 import lightTheme from '../assets/sun.svg'
 import darkTheme from '../assets/moon.svg'
-import { DarkModeContext, RecentreContext, type DarkModeContextType, type RecentreContextType } from '../App';
+import { CardExpandedContext, DarkModeContext, RecentreContext, type CardExpandedContextType, type DarkModeContextType, type RecentreContextType } from '../App';
 
 export const RecentreButton = () => {
     const currentBreakpoint = useBreakpoint();
@@ -43,6 +43,7 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
     const map = useMap();
     const currentBreakpoint = useBreakpoint()
     const { recentre } = useContext(RecentreContext) as RecentreContextType
+    const { isCardExpanded } = useContext(CardExpandedContext) as CardExpandedContextType
 
     const customIcon = new L.Icon({
         iconUrl: customMarker,
@@ -59,8 +60,14 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
 
     useEffect(() => {
         if (markerPosition) {
-            if (currentBreakpoint <= 700) {
+            if (currentBreakpoint <= 700 && isCardExpanded) {
                 const newLatLng = calculateNewLatLng(0, -120, markerPosition)
+                map.setView(newLatLng, map.getZoom(), {
+                    animate: true,
+                });
+            }
+            else if (currentBreakpoint <= 700 && !isCardExpanded) {
+                const newLatLng = calculateNewLatLng(0, -35, markerPosition)
                 map.setView(newLatLng, map.getZoom(), {
                     animate: true,
                 });
@@ -72,7 +79,7 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
                 });
             }
         }
-    }, [markerPosition, map, recentre]);
+    }, [markerPosition, map, recentre, isCardExpanded]);
 
     return <Marker position={markerPosition} icon={customIcon}></Marker>
 };
