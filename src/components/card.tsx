@@ -7,7 +7,7 @@ import '../components/styles/cardStyles.css'
 import useBreakpoint from "../hooks/useBreakpoint";
 import FlagImage from "./flagImage";
 import { getFlagImage } from "../hooks/getFlagImage";
-import { CardExpandedContext, type CardExpandedContextType } from "../App";
+import { CardExpandedContext, type CardExpandedContextType } from "../context/CardExpandedContext";
 
 function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, setIsExpanded: (value: boolean) => void }) {
     return (

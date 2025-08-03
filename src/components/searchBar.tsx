@@ -4,7 +4,7 @@ import useDebounce from "../hooks/useDebounce";
 import "../components/styles/searchBarStyles.css"
 import { supabase } from "../hooks/getCityListData";
 import useBreakpoint from "../hooks/useBreakpoint";
-import { DarkModeContext, type DarkModeContextType } from "../App";
+import { DarkModeContext, type DarkModeContextType } from "../context/DarkModeContext";
 
 
 interface SearchBarProps {

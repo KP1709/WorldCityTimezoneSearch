@@ -8,7 +8,9 @@ import customMarker from '../assets/map-pin-fill.svg'
 import gpsFix from '../assets/gps-fix.png'
 import lightTheme from '../assets/sun.svg'
 import darkTheme from '../assets/moon.svg'
-import { CardExpandedContext, DarkModeContext, RecentreContext, type CardExpandedContextType, type DarkModeContextType, type RecentreContextType } from '../App';
+import { CardExpandedContext, type CardExpandedContextType } from '../context/CardExpandedContext';
+import { DarkModeContext, type DarkModeContextType } from '../context/DarkModeContext';
+import { RecentreContext, type RecentreContextType } from '../context/RecentreContext';
 
 export const RecentreButton = () => {
     const currentBreakpoint = useBreakpoint();

@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import './styles/reloadModal.css';
-import { DarkModeContext, type DarkModeContextType } from "../App";
+import { DarkModeContext, type DarkModeContextType } from "../context/DarkModeContext";
 
 function ReloadModal({ setReloadRequired }: { setReloadRequired: (value: boolean) => void }) {
     const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
