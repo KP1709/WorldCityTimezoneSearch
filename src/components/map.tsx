@@ -8,9 +8,20 @@ import customMarker from '../assets/map-pin-fill.svg'
 import gpsFix from '../assets/gps-fix.png'
 import lightTheme from '../assets/sun.svg'
 import darkTheme from '../assets/moon.svg'
+import searchList from '../assets/list-magnifying-glass.svg'
 import { CardExpandedContext, type CardExpandedContextType } from '../context/CardExpandedContext';
 import { DarkModeContext, type DarkModeContextType } from '../context/DarkModeContext';
 import { RecentreContext, type RecentreContextType } from '../context/RecentreContext';
+
+export const SearchListButton = ({ setToggle, toggle }: { setToggle: (value: boolean) => void, toggle: boolean }) => {
+    const currentBreakpoint = useBreakpoint()
+
+    return (
+        <button id={currentBreakpoint <= 500 ? 'search-btn-sm' : 'search-btn-lg'} className='search-btn' onClick={() => setToggle(!toggle)}>
+            <img src={searchList} alt='Find by country and region' />
+        </button>
+    )
+}
 
 export const RecentreButton = () => {
     const currentBreakpoint = useBreakpoint();
@@ -86,7 +97,7 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
     return <Marker position={markerPosition} icon={customIcon}></Marker>
 };
 
-export default function Map({ chosenCity }: { chosenCity?: CitiesType | undefined }) {
+export default function Map({ chosenCity }: { chosenCity?: CitiesType | null }) {
     const currentBreakpoint = useBreakpoint();
     const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
     const latLng = chosenCity?.coordinates.split(',')

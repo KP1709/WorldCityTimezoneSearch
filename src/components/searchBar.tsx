@@ -5,30 +5,34 @@ import "../components/styles/searchBarStyles.css"
 import { supabase } from "../hooks/getCityListData";
 import useBreakpoint from "../hooks/useBreakpoint";
 import { DarkModeContext, type DarkModeContextType } from "../context/DarkModeContext";
-
+import { SearchQueryContext, type SearchQueryContextType } from "../context/SearchQueryContext";
+import { useFlagCodes } from "../hooks/useFlagCodes";
+import { getRegionFullName } from "../hooks/getFullRegionName";
 
 interface SearchBarProps {
     onSelect: (cities: CitiesType) => void
 }
 
 const SearchBar = ({ onSelect }: SearchBarProps) => {
-    const [query, setQuery] = useState('')
+    const { searchQuery, setSearchQuery } = useContext(SearchQueryContext) as SearchQueryContextType
+    const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
+    const codesList = useFlagCodes()
+
     const [results, setResults] = useState<CitiesType[]>([])
-    const [selected, setSelected] = useState<CitiesType | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
-    const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
+    const [selectedCity, setSelectedCity] = useState<CitiesType | null>(null)
 
     const inputRef = useRef<HTMLInputElement>(null);
     const resultRefs = useRef<(HTMLLIElement | null)[]>([]);
 
-    const debouncedQuery = useDebounce(query, 200)
+    const debouncedQuery = useDebounce(searchQuery, 200)
     const currentBreakpoint = useBreakpoint()
 
     useEffect(() => {
-        if (query.length === 0) {
+        if (searchQuery.length === 0) {
             setResults([]);
-            setSelected(null);
+            setSelectedCity(null);
             return;
         }
 
@@ -38,7 +42,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             const { data, error } = await supabase
                 .from('WorldCities')
                 .select('*')
-                .ilike('ascii_name', `${query}%`)
+                .ilike('ascii_name', `${searchQuery}%`)
                 .limit(5)
                 .order('ascii_name', { ascending: true });
 
@@ -55,10 +59,9 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     }, [debouncedQuery]);
 
     const handleSelect = (item: CitiesType) => {
-        setSelected(item)
+        setSelectedCity(item)
         onSelect(item)
-        setQuery(item.ascii_name)
-        setHighlightedIndex(null)
+        setSearchQuery(item.ascii_name)
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -74,9 +77,15 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             handleSelect(results[highlightedIndex])
         }
         else if (e.key === 'Escape') {
-            setQuery('')
+            setSearchQuery('')
             setResults([])
-            setSelected(null)
+            setSelectedCity(null)
+        }
+    };
+
+    const handleFocus = () => {
+        if (inputRef.current) {
+            inputRef.current.select()
         }
     };
 
@@ -89,26 +98,27 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
                     id="worldCitySearch"
                     type="search"
                     placeholder="Search Places"
-                    value={query}
-                    onChange={(e) => { setQuery(e.target.value); setSelected(null); }}
+                    value={searchQuery}
+                    onChange={(e) => { setSearchQuery(e.target.value); setSelectedCity(null); }}
                     onKeyDown={handleKeyDown}
                     ref={inputRef}
+                    onFocus={handleFocus}
                     className='search-input'
                 />
             </label>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {(!selected || (!selected && !query)) &&
+            {(!selectedCity || (!selectedCity && !searchQuery)) &&
                 <ul className="search-results" style={{ border: results.length !== 0 ? '2px solid #ccc' : '' }}>
                     {results.map((item, index) => (
-                        <li
+                        item && <li
                             key={item.geoname_id}
                             onClick={() => handleSelect(item)}
                             className={`result-item ${highlightedIndex === index ? 'highlighted' : ''}`}
                             //@ts-ignore
                             ref={(el) => (resultRefs.current[index] = el)}
                         >
-                            {item.country_name_en === 'United States' && <>{item.ascii_name} - {item.admin1_code} - {item.country_name_en}</>}
+                            {item.country_name_en === 'United States' && <>{item.ascii_name} - {getRegionFullName(codesList, item.admin1_code, item.country_name_en)} - {item.country_name_en}</>}
                             {item.country_name_en !== 'United States' && <>{item.ascii_name} - {item.country_name_en}</>}
                         </li>
                     ))}

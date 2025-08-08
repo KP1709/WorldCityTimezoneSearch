@@ -7,6 +7,7 @@ import '../components/styles/cardStyles.css'
 import useBreakpoint from "../hooks/useBreakpoint";
 import FlagImage from "./flagImage";
 import { getFlagImage } from "../hooks/getFlagImage";
+import { useFlagCodes } from "../hooks/useFlagCodes";
 import { CardExpandedContext, type CardExpandedContextType } from "../context/CardExpandedContext";
 
 function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, setIsExpanded: (value: boolean) => void }) {
@@ -23,20 +24,21 @@ function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, 
 }
 
 function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, markerTimeData: TimeZoneType | undefined }) {
-    if (!markerTimeData) return null
-    const { abbreviation, regionName, countryName } = markerTimeData
-    const { ascii_name, coordinates, timezone, country_name_en } = chosenCity
-    const { flags } = getFlagImage({ chosenCity });
-    const { mainFlag, secondaryFlag } = flags
-    const currentBreakpoint = useBreakpoint()
-    const { isCardExpanded, setIsCardExpanded } = useContext(CardExpandedContext) as CardExpandedContextType
+    const flagCodesList = useFlagCodes();
+    if (!markerTimeData) return null;
+    const { abbreviation, regionName, countryName } = markerTimeData;
+    const { ascii_name, coordinates, timezone, country_name_en } = chosenCity;
+    const { flags } = getFlagImage(chosenCity, flagCodesList);
+    const { mainFlag, secondaryFlag } = flags;
+    const currentBreakpoint = useBreakpoint();
+    const { isCardExpanded, setIsCardExpanded } = useContext(CardExpandedContext) as CardExpandedContextType;
 
-    const latLng = coordinates.split(',')
+    const latLng = coordinates.split(',');
 
     const [isSmallScreen] = useState(() => {
-        if (currentBreakpoint < 500) return true
-        else return false
-    })
+        if (currentBreakpoint < 500) return true;
+        else return false;
+    });
 
     if (currentBreakpoint < 500 && !isCardExpanded) {
         return (
@@ -50,7 +52,7 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
                 <span id='date-small'><TimeDate timezone={timezone} time={false} /> </span>
                 <span id='location-small'>{ascii_name}, {regionName && `${regionName},`} {countryName}</span>
             </div>
-        )
+        );
     }
 
     return (
@@ -78,7 +80,7 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
                 </div>
             </span>
         </div>
-    )
+    );
 }
 
 export default function Card({ chosenCity }: { chosenCity: CitiesType }) {
