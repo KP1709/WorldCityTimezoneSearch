@@ -69,6 +69,11 @@
     grid-column: 1 /-1;
 }
 
+#location,
+#location-small {
+    text-align: center;
+}
+
 #date {
     grid-row: 2;
 }
