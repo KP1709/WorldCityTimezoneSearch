@@ -24,6 +24,8 @@ function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, 
 
 function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, markerTimeData: TimeZoneType | undefined }) {
     if (!markerTimeData) return null
+    const { zoneName, abbreviation, regionName, countryName } = markerTimeData
+    const { city_ascii, lng, lat } = chosenCity
     const { flags } = getFlagImage({ markerTimeData });
     const { mainFlag, secondaryFlag } = flags
     const currentBreakpoint = useBreakpoint()
@@ -38,13 +40,13 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
         return (
             <div id='main-card' className='small' style={{ height: '100px' }}>
                 {isSmallScreen && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
-                <span id="clock"><TimeDate timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}
+                <span id="clock"><TimeDate timezone={zoneName} /> {abbreviation}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                     </svg>
                 </span>
-                <span id='date-small'><TimeDate timezone={markerTimeData?.zoneName} time={false} /> </span>
-                <span id='location-small'>{chosenCity?.city_ascii}, {markerTimeData?.regionName}, {markerTimeData?.countryName}</span>
+                <span id='date-small'><TimeDate timezone={zoneName} time={false} /> </span>
+                <span id='location-small'>{city_ascii}, {regionName}, {countryName}</span>
             </div>
         )
     }
@@ -53,20 +55,20 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
         <div id='main-card' className='large' style={{ height: '275px' }}>
             {isCardExpanded && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
 
-            <span id="clock"><TimeDate timezone={markerTimeData?.zoneName} /> {markerTimeData?.abbreviation}
+            <span id="clock"><TimeDate timezone={zoneName} /> {abbreviation}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                     <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                 </svg>
             </span>
-            <span id='date'><TimeDate timezone={markerTimeData?.zoneName} time={false} /> </span>
-            <span id='timezone-id'>{DateTime.now().setZone(markerTimeData?.zoneName).toFormat('ZZZZZ') ?? null}</span>
-            <span id='timezone-name'>{markerTimeData?.zoneName}</span>
+            <span id='date'><TimeDate timezone={zoneName} time={false} /> </span>
+            <span id='timezone-id'>{DateTime.now().setZone(zoneName).toFormat('ZZZZZ') ?? null}</span>
+            <span id='timezone-name'>{zoneName}</span>
             <span id='longitude'>
-                <div>Long: {chosenCity.lat}</div>
+                <div>Long: {lat}</div>
             </span>
 
-            <span id='latitude'><div>Lat: {chosenCity.lng}</div></span>
-            <span id='location'>{chosenCity?.city_ascii}, {markerTimeData?.regionName && `${markerTimeData?.regionName},`} {markerTimeData?.countryName}</span>
+            <span id='latitude'><div>Lat: {lng}</div></span>
+            <span id='location'>{city_ascii}, {regionName && `${regionName},`} {countryName}</span>
             <span id='flags'>
                 <div className='flex-row'>
                     {mainFlag && <FlagImage image={mainFlag} />}
