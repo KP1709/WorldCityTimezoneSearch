@@ -66,7 +66,7 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
             </span>
 
             <span id='latitude'><div>Lat: {chosenCity.lng}</div></span>
-            <span id='location'>{chosenCity?.city_ascii}, {markerTimeData?.regionName}, {markerTimeData?.countryName}</span>
+            <span id='location'>{chosenCity?.city_ascii}, {markerTimeData?.regionName && `${markerTimeData?.regionName},`} {markerTimeData?.countryName}</span>
             <span id='flags'>
                 <div className='flex-row'>
                     {mainFlag && <FlagImage image={mainFlag} />}
