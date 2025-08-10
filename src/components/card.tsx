@@ -46,7 +46,7 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
                     </svg>
                 </span>
                 <span id='date-small'><TimeDate timezone={zoneName} time={false} /> </span>
-                <span id='location-small'>{city_ascii}, {regionName}, {countryName}</span>
+                <span id='location-small'>{city_ascii}, {regionName && `${regionName},`} {countryName}</span>
             </div>
         )
     }
