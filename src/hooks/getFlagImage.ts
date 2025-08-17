@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import type { TimeZoneType } from '../types'
+import type { CitiesType } from '../types'
 
-export const getFlagImage = ({ markerTimeData }: { markerTimeData: TimeZoneType }) => {
+export const getFlagImage = ({ chosenCity }: { chosenCity: CitiesType }) => {
     const [flags, setFlags] = useState({ mainFlag: '', secondaryFlag: '' })
+    const { country_code, admin1_code } = chosenCity
 
     const FLAGSIZE = 'h40'
+    const mainFlagCode = country_code.toLowerCase()
 
-    // Supported on API - some countries not included in API do have multiple flags
-    const countryCodeDuelFlag = ['gb', 'us']
+    // API only supports UK and US having two flags
+    const secondaryFlagCode = `${country_code.toLowerCase()}-${admin1_code.toLowerCase()}`
 
     useEffect(() => {
         const fetchCodesList = async () => {
@@ -15,16 +17,12 @@ export const getFlagImage = ({ markerTimeData }: { markerTimeData: TimeZoneType 
                 const response = await fetch('https://flagcdn.com/en/codes.json')
                 const flagCodes = await response.json();
 
-                if (flagCodes[markerTimeData?.countryCode.toLowerCase()]) {
-                    setFlags(flags => ({ ...flags, mainFlag: `https://flagcdn.com/${FLAGSIZE}/${markerTimeData?.countryCode.toLowerCase()}.png` }))
+                if (flagCodes[mainFlagCode]) {
+                    setFlags(flags => ({ ...flags, mainFlag: `https://flagcdn.com/${FLAGSIZE}/${mainFlagCode}.png` }))
                 }
 
-                // For countries with two flags, there is no ISO 3 code returned 
-                // from the Timezone API response. So we need to search for the ISO 
-                // code by searching the region name to find the code (used as the key) in the Flags API.
-                if (countryCodeDuelFlag.includes(markerTimeData?.countryCode.toLowerCase())) {
-                    const flagCode = Object.keys(flagCodes).find((key) => flagCodes[key] === markerTimeData.regionName)
-                    setFlags(flags => ({ ...flags, secondaryFlag: `https://flagcdn.com/${FLAGSIZE}/${flagCode}.png` }))
+                if (flagCodes[secondaryFlagCode]) {
+                    setFlags(flags => ({ ...flags, secondaryFlag: `https://flagcdn.com/${FLAGSIZE}/${secondaryFlagCode}.png` }))
                 }
 
             } catch (error) {
@@ -33,7 +31,7 @@ export const getFlagImage = ({ markerTimeData }: { markerTimeData: TimeZoneType 
         }
         fetchCodesList()
 
-    }, [markerTimeData])
+    }, [chosenCity])
 
 
     return { flags }

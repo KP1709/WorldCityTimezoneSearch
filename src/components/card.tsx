@@ -24,12 +24,14 @@ function ToggleCardButton({ isExpanded, setIsExpanded }: { isExpanded: boolean, 
 
 function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, markerTimeData: TimeZoneType | undefined }) {
     if (!markerTimeData) return null
-    const { zoneName, abbreviation, regionName, countryName } = markerTimeData
-    const { city_ascii, lng, lat } = chosenCity
-    const { flags } = getFlagImage({ markerTimeData });
+    const { abbreviation, regionName, countryName } = markerTimeData
+    const { ascii_name, coordinates, timezone, country_name_en } = chosenCity
+    const { flags } = getFlagImage({ chosenCity });
     const { mainFlag, secondaryFlag } = flags
     const currentBreakpoint = useBreakpoint()
     const { isCardExpanded, setIsCardExpanded } = useContext(CardExpandedContext) as CardExpandedContextType
+
+    const latLng = coordinates.split(',')
 
     const [isSmallScreen] = useState(() => {
         if (currentBreakpoint < 500) return true
@@ -40,13 +42,13 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
         return (
             <div id='main-card' className='small' style={{ height: '100px' }}>
                 {isSmallScreen && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
-                <span id="clock"><TimeDate timezone={zoneName} /> {abbreviation}
+                <span id="clock"><TimeDate timezone={timezone} /> {abbreviation}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                     </svg>
                 </span>
-                <span id='date-small'><TimeDate timezone={zoneName} time={false} /> </span>
-                <span id='location-small'>{city_ascii}, {regionName && `${regionName},`} {countryName}</span>
+                <span id='date-small'><TimeDate timezone={timezone} time={false} /> </span>
+                <span id='location-small'>{ascii_name}, {regionName && `${regionName},`} {countryName}</span>
             </div>
         )
     }
@@ -55,20 +57,20 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
         <div id='main-card' className='large' style={{ height: '275px' }}>
             {isCardExpanded && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
 
-            <span id="clock"><TimeDate timezone={zoneName} /> {abbreviation}
+            <span id="clock"><TimeDate timezone={timezone} /> {abbreviation}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                     <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                 </svg>
             </span>
-            <span id='date'><TimeDate timezone={zoneName} time={false} /> </span>
-            <span id='timezone-id'>{DateTime.now().setZone(zoneName).toFormat('ZZZZZ') ?? null}</span>
-            <span id='timezone-name'>{zoneName}</span>
+            <span id='date'><TimeDate timezone={timezone} time={false} /> </span>
+            <span id='timezone-id'>{DateTime.now().setZone(timezone).toFormat('ZZZZZ') ?? null}</span>
+            <span id='timezone-name'>{timezone}</span>
             <span id='longitude'>
-                <div>Long: {lat}</div>
+                <div>Lng: {latLng[1]}</div>
             </span>
 
-            <span id='latitude'><div>Lat: {lng}</div></span>
-            <span id='location'>{city_ascii}, {regionName && `${regionName},`} {countryName}</span>
+            <span id='latitude'><div>Lat: {latLng[0]}</div></span>
+            <span id='location'>{ascii_name}, {regionName && `${regionName},`} {country_name_en || countryName}</span>
             <span id='flags'>
                 <div className='flex-row'>
                     {mainFlag && <FlagImage image={mainFlag} />}
@@ -80,7 +82,10 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
 }
 
 export default function Card({ chosenCity }: { chosenCity: CitiesType }) {
-    const { markerTimeData, isLoading, isError } = useTimeZone([chosenCity.lat, chosenCity.lng], 2000);
+    const { coordinates } = chosenCity;
+    const latLng = coordinates.split(',')
+
+    const { markerTimeData, isLoading, isError, } = useTimeZone([Number(latLng[0]), Number(latLng[1])], 2000);
     const currentBreakpoint = useBreakpoint()
 
     if (isLoading) {

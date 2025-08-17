@@ -36,9 +36,9 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             setError(null);
 
             const { data, error } = await supabase
-                .from('Cities')
+                .from('WorldCities')
                 .select('*')
-                .ilike('city_ascii', `${query}%`)
+                .ilike('ascii_name', `${query}%`)
                 .limit(5);
 
             if (error) {
@@ -56,7 +56,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     const handleSelect = (item: CitiesType) => {
         setSelected(item)
         onSelect(item)
-        setQuery(item.city_ascii)
+        setQuery(item.ascii_name)
         setHighlightedIndex(null)
     };
 
@@ -101,14 +101,14 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
                 <ul className="search-results" style={{ border: results.length !== 0 ? '2px solid #ccc' : '' }}>
                     {results.map((item, index) => (
                         <li
-                            key={item.id}
+                            key={item.geoname_id}
                             onClick={() => handleSelect(item)}
                             className={`result-item ${highlightedIndex === index ? 'highlighted' : ''}`}
                             //@ts-ignore
                             ref={(el) => (resultRefs.current[index] = el)}
                         >
-                            {item.country === 'United States' && <>{item.city_ascii} - {item.admin_name} - {item.country}</>}
-                            {item.country !== 'United States' && <>{item.city_ascii} - {item.country}</>}
+                            {item.country_name_en === 'United States' && <>{item.ascii_name} - {item.admin1_code} - {item.country_name_en}</>}
+                            {item.country_name_en !== 'United States' && <>{item.ascii_name} - {item.country_name_en}</>}
                         </li>
                     ))}
                     {results.length > 0 && (

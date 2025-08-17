@@ -27,16 +27,17 @@ export type CityMarkerInfo = {
 };
 
 export type CitiesType = {
-    id: number,
+    geoname_id: number,
+    name: string,
+    ascii_name: string,
+    feature_class: string,
+    feature_code: string,
+    country_code: string,
+    country_code2: string
+    country_name_en: string,
+    admin1_code: string,
+    admin2_code: string,
     population: number,
-    capital: string,
-    iso2: string,
-    iso3: string,
-    country: string,
-    lat: number,
-    lng: number,
-    city_ascii: string,
-    city: string,
-    admin_name: string,
-    [key: string]: any
+    coordinates: string,
+    timezone: string,
 }

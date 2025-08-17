@@ -89,6 +89,7 @@ const FollowMarker = ({ markerPosition }: { markerPosition: latLngType }) => {
 export default function Map({ chosenCity }: { chosenCity?: CitiesType | undefined }) {
     const currentBreakpoint = useBreakpoint();
     const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
+    const latLng = chosenCity?.coordinates.split(',')
 
     return (
         <MapContainer id='map-container' className={darkMode ? 'dark' : 'light'}
@@ -104,7 +105,7 @@ export default function Map({ chosenCity }: { chosenCity?: CitiesType | undefine
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {currentBreakpoint >= 500 && <ZoomControl position={'topright'} />}
-            {chosenCity && <FollowMarker markerPosition={[chosenCity?.lat!, chosenCity?.lng!]} />}
+            {chosenCity && <FollowMarker markerPosition={[Number(latLng?.[0]), Number(latLng?.[1])]} />}
         </MapContainer>
     );
 }
