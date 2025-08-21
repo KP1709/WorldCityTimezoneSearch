@@ -19,6 +19,8 @@ After completing a technical debt story where there were inconsistencies with ti
     - Shows second flag if a region or state does have one
 - Light/Dark mode overlay on map
     - Requires reloading because of how React-leaflet works
+- Able to select city by country and/or region through modal
+    - 🔩 Basic implementation - continuing to improve
 
 ## 📚 Resources
 - How to find a key from a value (Peter Morgan) - https://petermorgan.dev/blog/find-a-values-key-in-a-javascript-object/
@@ -28,11 +30,9 @@ After completing a technical debt story where there were inconsistencies with ti
 ## 🪣 APIs / Data
 - Country flags - https://flagpedia.net/download/api
 - Timezone information - https://timezonedb.com/
-- World city data - https://simplemaps.com/data/world-cities
+- World city data - https://public.opendatasoft.com/explore/?sort=modified&q=Geonames+-+All+Cities
 
 ## ➕ Additional features to add
 - Think of better way to present the time data
 - Add ability to tap map to add marker and display time date information
-- Filter search by country 
-    - Would be better to show all cities to search by initially before reducing list (In progress)
 
