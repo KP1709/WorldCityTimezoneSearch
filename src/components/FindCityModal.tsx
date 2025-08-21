@@ -7,7 +7,6 @@ import { SearchQueryContext, type SearchQueryContextType } from '../context/Sear
 import { getCountries } from '../hooks/findCity/getCountries';
 import { getCountryRegions } from '../hooks/findCity/getCountryRegions';
 import { getCountryRegionCities } from '../hooks/findCity/getCountryRegionsCities';
-import { getCountryCities } from '../hooks/findCity/getCountryCities';
 import { useSelectedCity } from '../hooks/findCity/useSelectedCity';
 import { useFlagCodes } from '../hooks/useFlagCodes';
 import { getRegionFullName } from '../hooks/getFullRegionName';
@@ -70,30 +69,18 @@ const CountryRegionsPane = ({ selectedCountry, setSelectedRegion }: { selectedCo
 }
 
 const CountryRegionCitiesPane = ({ selectedCountry, selectedRegion, setSelectedCityName }: { selectedCountry: string, selectedRegion: string, setSelectedCityName: (value: string) => void, selectedCityName: string | null }) => {
-    const { cities: countryCities, countryCitiesError, countryCitiesLoading } = getCountryCities(selectedCountry)
     const { cities: countryRegionCities, countryRegionCitiesError, countryRegionCitiesLoading } = getCountryRegionCities(selectedCountry, selectedRegion)
 
-    if (countryRegionCitiesError || countryCitiesError) {
+    if (countryRegionCitiesError) {
         return (
             <p>Error in fetching cities for the country's region</p>
         )
     }
 
-    if (countryRegionCitiesLoading || countryCitiesLoading) {
+    if (countryRegionCitiesLoading) {
         return (
             <p>Loading cities...</p>
         )
-    }
-
-    if (!selectedRegion) {
-        <>
-            <p>Cities (Temporary limit of 3000 results)</p>
-            <ul className='modal-content'>
-                {countryCities?.map((city: string, index: number) =>
-                    <li key={index} onClick={() => { setSelectedCityName(city) }}>{city}</li>
-                )}
-            </ul>
-        </>
     }
 
     return (
