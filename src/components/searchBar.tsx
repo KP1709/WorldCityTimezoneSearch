@@ -39,7 +39,8 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
                 .from('WorldCities')
                 .select('*')
                 .ilike('ascii_name', `${query}%`)
-                .limit(5);
+                .limit(5)
+                .order('ascii_name', { ascending: true });
 
             if (error) {
                 setError(error.message)
