@@ -34,5 +34,5 @@ After completing a technical debt story where there were inconsistencies with ti
 - Think of better way to present the time data
 - Add ability to tap map to add marker and display time date information
 - Filter search by country 
-    - Would be better to show all cities to search by initially before reducing list
+    - Would be better to show all cities to search by initially before reducing list (In progress)
 
