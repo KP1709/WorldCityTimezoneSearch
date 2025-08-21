@@ -124,7 +124,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
                     ))}
                     {results.length > 0 && (
                         <li className="attribution">
-                            <span>City data provided by <a href="https://simplemaps.com/data/world-cities">SimpleMaps.com</a>,</span>
+                            <span>City data provided by <a href='https://public.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000/table/?disjunctive.cou_name_en&sort=name'>OpenDataSoft</a>,</span>
                             <span>licensed under CC BY 4.0.</span>
                             <span>&#9888; Not all cities will be searchable</span>
                         </li>
