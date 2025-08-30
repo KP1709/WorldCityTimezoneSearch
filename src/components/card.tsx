@@ -45,12 +45,12 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
             <div id='main-card' className='small' style={{ height: '100px' }}>
                 {isSmallScreen && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
                 <span id="clock"><TimeDate timezone={timezone} /> {abbreviation}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
+                    <svg id='live-indicator' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                         <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                     </svg>
                 </span>
                 <span id='date-small'><TimeDate timezone={timezone} time={false} /> </span>
-                <span id='location-small'>{ascii_name}, {regionName && `${regionName},`} {countryName}</span>
+                <span id='location-small'><p>{ascii_name}, {regionName && `${regionName},`} {countryName}</p></span>
             </div>
         );
     }
@@ -60,19 +60,19 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
             {isCardExpanded && <ToggleCardButton isExpanded={isCardExpanded} setIsExpanded={setIsCardExpanded} />}
 
             <span id="clock"><TimeDate timezone={timezone} /> {abbreviation}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
+                <svg id='live-indicator' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" aria-hidden="true">
                     <path d="M232,128A104,104,0,1,1,128,24,104.13,104.13,0,0,1,232,128Z"></path>
                 </svg>
             </span>
             <span id='date'><TimeDate timezone={timezone} time={false} /> </span>
-            <span id='timezone-id'>{DateTime.now().setZone(timezone).toFormat('ZZZZZ') ?? null}</span>
-            <span id='timezone-name'>{timezone}</span>
+            <span id='timezone-id'><p>{DateTime.now().setZone(timezone).toFormat('ZZZZZ') ?? null}</p></span>
+            <span id='timezone-name'><p>{timezone}</p></span>
             <span id='longitude'>
-                <div>Lng: {latLng[1]}</div>
+                <div><p>Lng: {Number(latLng[1]).toFixed(3)}</p></div>
             </span>
 
-            <span id='latitude'><div>Lat: {latLng[0]}</div></span>
-            <span id='location'>{ascii_name}, {regionName && `${regionName},`} {country_name_en || countryName}</span>
+            <span id='latitude'><div><p>Lat: {Number(latLng[0]).toFixed(3)}</p></div></span>
+            <span id='location'><p>{ascii_name}, {regionName && `${regionName},`} {country_name_en || countryName}</p></span>
             <span id='flags'>
                 <div className='flex-row'>
                     {mainFlag && <FlagImage image={mainFlag} />}
