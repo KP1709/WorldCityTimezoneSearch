@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import './styles/globalModalStyles.css'
 import './styles/findCityModalStyles.css'
-import { DarkModeContext, type DarkModeContextType } from '../context/DarkModeContext';
 import type { CitiesType } from '../types';
 import { SearchQueryContext, type SearchQueryContextType } from '../context/SearchQueryContext';
 import { getCountries } from '../hooks/findCity/getCountries';
@@ -11,93 +10,108 @@ import { useSelectedCity } from '../hooks/findCity/useSelectedCity';
 import { useFlagCodes } from '../hooks/useFlagCodes';
 import { getRegionFullName } from '../hooks/getFullRegionName';
 
-const CountryPane = ({ setSelectedCountry }: { setSelectedCountry: (value: string) => void }) => {
+type CountryPaneType = {
+    setSelectedCountry: (value: string) => void
+}
+
+type CountryRegionsPaneType = {
+    selectedCountry: string,
+    setSelectedRegion: (value: string) => void
+}
+
+type CountryRegionCitiesPaneType = {
+    selectedCountry: string
+    selectedRegion: string
+    setSelectedCityName: (value: string) => void
+    selectedCityName: string | null
+}
+
+const CountryPane = ({ setSelectedCountry }: CountryPaneType) => {
     const { countries, countriesError, countriesLoading } = getCountries()
 
     if (countriesError) {
         return (
-            <p>Error in fetching countries</p>
+            <p className='search-modal modal-message'>Error in fetching countries</p>
         )
     }
 
     if (countriesLoading) {
         return (
-            <p>Loading countries...</p>
+            <p className='search-modal modal-message'>Loading countries...</p>
         )
     }
 
     return (
-        <>
-            <p>Countries</p>
-            <ul className='modal-content'>
+        <div className='search-modal'>
+            <h2>Countries</h2>
+            <ul className='modal-list'>
                 {countries?.map((countries: string, index: number) =>
                     <li key={index} onClick={() => { setSelectedCountry(countries) }}>{countries}</li>
                 )}
             </ul>
-        </>
+        </div>
     )
 }
 
-const CountryRegionsPane = ({ selectedCountry, setSelectedRegion }: { selectedCountry: string, setSelectedRegion: (value: string) => void }) => {
+const CountryRegionsPane = ({ selectedCountry, setSelectedRegion }: CountryRegionsPaneType) => {
     const { regions, countryRegionsError, countryRegionsLoading } = getCountryRegions(selectedCountry)
     const codesList = useFlagCodes()
 
     if (countryRegionsError) {
         return (
-            <p>Error in fetching country regions or states</p>
+            <p className='search-modal modal-message'>Error in fetching country regions or states</p>
         )
     }
 
     if (countryRegionsLoading) {
         return (
-            <p>Loading regions...</p>
+            <p className='search-modal modal-message'>Loading regions...</p>
         )
     }
 
     return (
-        <>
-            <p>Regions</p>
-            <ul className='modal-content'>
+        <div className='search-modal'>
+            <h2>Regions</h2>
+            <ul className='modal-list'>
                 {regions?.map((region: string, index: number) =>
                     <li key={index} onClick={() => { setSelectedRegion(region) }}>{
                         getRegionFullName(codesList, region, selectedCountry, true)
                     }</li>
                 )}
             </ul>
-        </>
+        </div>
     )
 }
 
-const CountryRegionCitiesPane = ({ selectedCountry, selectedRegion, setSelectedCityName }: { selectedCountry: string, selectedRegion: string, setSelectedCityName: (value: string) => void, selectedCityName: string | null }) => {
+const CountryRegionCitiesPane = ({ selectedCountry, selectedRegion, setSelectedCityName }: CountryRegionCitiesPaneType) => {
     const { cities: countryRegionCities, countryRegionCitiesError, countryRegionCitiesLoading } = getCountryRegionCities(selectedCountry, selectedRegion)
 
     if (countryRegionCitiesError) {
         return (
-            <p>Error in fetching cities for the country's region</p>
+            <p className='search-modal modal-message'>Error in fetching cities for the country's region</p>
         )
     }
 
     if (countryRegionCitiesLoading) {
         return (
-            <p>Loading cities...</p>
+            <p className='search-modal modal-message'>Loading cities...</p>
         )
     }
 
     return (
-        <>
-            <p>Cities (Temporary limit of 3000 results)</p>
-            <ul className='modal-content'>
+        <div className='search-modal'>
+            <h2>Cities (Temporary limit of 3000 results)</h2>
+            <ul className='modal-list'>
                 {countryRegionCities?.map((city: string, index: number) =>
                     <li key={index} onClick={() => { setSelectedCityName(city) }}>{city}</li>
                 )}
             </ul>
-        </>
+        </div>
     )
 }
 
 const FindCityModal = ({ setToggle, setSelectedCity }: { setToggle: (value: boolean) => void, setSelectedCity: (value: CitiesType | null) => void }) => {
     const { setSearchQuery } = useContext(SearchQueryContext) as SearchQueryContextType
-    const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
 
     const [selectedCountry, setSelectedCountry] = useState('')
     const [selectedRegion, setSelectedRegion] = useState('')
@@ -121,18 +135,27 @@ const FindCityModal = ({ setToggle, setSelectedCity }: { setToggle: (value: bool
     const showCityPaneWithRegion = countriesWithLetterRegions.includes(selectedCountry) && selectedRegion && !selectedCityName
 
     return (
-        <dialog id='search-modal' className={darkMode ? 'modal-overlay light-modal' : 'modal-overlay dark-modal'}>
-            {showCountryPane &&
-                <CountryPane setSelectedCountry={setSelectedCountry} />}
-            {showRegionPane &&
-                <CountryRegionsPane selectedCountry={selectedCountry} setSelectedRegion={setSelectedRegion} />}
-            {(showCityPaneWithRegion || showCityPaneNoRegion) &&
-                <CountryRegionCitiesPane
-                    selectedCountry={selectedCountry}
-                    selectedRegion={selectedRegion}
-                    setSelectedCityName={setSelectedCityName}
-                    selectedCityName={selectedCityName} />}
-        </dialog>
+        <div className='modal-overlay'>
+            <div className='modal-main'>
+                <div className="modal-controls">
+                    {/* Need to make button position: absolute
+                OnClick needs to have condition whether to erase certain states */}
+                    {(showRegionPane || showCityPaneNoRegion || showCityPaneWithRegion) &&
+                        <button id='back-btn' onClick={() => { }}>Back Btn</button>}
+                    <button id='close-modal-btn' onClick={() => { }}>Close</button>
+                </div>
+                {showCountryPane &&
+                    <CountryPane setSelectedCountry={setSelectedCountry} />}
+                {showRegionPane &&
+                    <CountryRegionsPane selectedCountry={selectedCountry} setSelectedRegion={setSelectedRegion} />}
+                {(showCityPaneWithRegion || showCityPaneNoRegion) &&
+                    <CountryRegionCitiesPane
+                        selectedCountry={selectedCountry}
+                        selectedRegion={selectedRegion}
+                        setSelectedCityName={setSelectedCityName}
+                        selectedCityName={selectedCityName} />}
+            </div>
+        </div>
     )
 }
 
