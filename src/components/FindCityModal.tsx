@@ -100,7 +100,7 @@ const CountryRegionCitiesPane = ({ selectedCountry, selectedRegion, setSelectedC
 
     return (
         <div className='search-modal'>
-            <h2>Cities (Temporary limit of 3000 results)</h2>
+            <h2>Cities (3000 result limit)</h2>
             <ul className='modal-list'>
                 {countryRegionCities?.map((city: string, index: number) =>
                     <li key={index} onClick={() => { setSelectedCityName(city) }}>{city}</li>
