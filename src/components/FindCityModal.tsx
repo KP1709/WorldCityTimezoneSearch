@@ -134,15 +134,37 @@ const FindCityModal = ({ setToggle, setSelectedCity }: { setToggle: (value: bool
     const showCityPaneNoRegion = selectedCountry && !countriesWithLetterRegions.includes(selectedCountry) && !selectedRegion
     const showCityPaneWithRegion = countriesWithLetterRegions.includes(selectedCountry) && selectedRegion && !selectedCityName
 
+    const handleBackButton = () => {
+        if (showRegionPane) {
+            setSelectedRegion('')
+            setSelectedCountry('')
+        }
+        else if (showCityPaneNoRegion) {
+            setSelectedCityName('')
+            setSelectedCountry('')
+        }
+        else {
+            setSelectedCityName('')
+            setSelectedRegion('')
+        }
+    }
+
+    const handleCloseModal = () => {
+        setToggle(false)
+        setSelectedCityName('')
+        setSelectedCountry('')
+        setSelectedRegion('')
+    }
+
     return (
         <div className='modal-overlay'>
             <div className='modal-main'>
                 <div className="modal-controls">
-                    {/* Need to make button position: absolute
-                OnClick needs to have condition whether to erase certain states */}
+                    <button onClick={() => {
+                        handleCloseModal()
+                    }}>&#10005;</button>
                     {(showRegionPane || showCityPaneNoRegion || showCityPaneWithRegion) &&
-                        <button id='back-btn' onClick={() => { }}>Back Btn</button>}
-                    <button id='close-modal-btn' onClick={() => { }}>Close</button>
+                        <button onClick={() => { handleBackButton() }}>&#8592;</button>}
                 </div>
                 {showCountryPane &&
                     <CountryPane setSelectedCountry={setSelectedCountry} />}
