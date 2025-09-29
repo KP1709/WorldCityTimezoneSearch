@@ -8,6 +8,7 @@ import { DarkModeContext, type DarkModeContextType } from "../context/DarkModeCo
 import { SearchQueryContext, type SearchQueryContextType } from "../context/SearchQueryContext";
 import { useFlagCodes } from "../hooks/useFlagCodes";
 import { getRegionFullName } from "../hooks/getFullRegionName";
+import { ChosenCityFromModalContext, type ChosenCityFromModalContextType } from "../context/ChosenCityFromModalContext";
 
 interface SearchBarProps {
     onSelect: (cities: CitiesType) => void
@@ -16,6 +17,7 @@ interface SearchBarProps {
 const SearchBar = ({ onSelect }: SearchBarProps) => {
     const { searchQuery, setSearchQuery } = useContext(SearchQueryContext) as SearchQueryContextType
     const { darkMode } = useContext(DarkModeContext) as DarkModeContextType;
+    const { setIsChosenCityFromModal, isChosenCityFromModal } = useContext(ChosenCityFromModalContext) as ChosenCityFromModalContextType
     const codesList = useFlagCodes()
 
     const [results, setResults] = useState<CitiesType[]>([])
@@ -30,6 +32,8 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
     const currentBreakpoint = useBreakpoint()
 
     useEffect(() => {
+        setIsChosenCityFromModal(false)
+
         if (searchQuery.length === 0) {
             setResults([]);
             setSelectedCity(null);
@@ -62,6 +66,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
         setSelectedCity(item)
         onSelect(item)
         setSearchQuery(item.ascii_name)
+        setIsChosenCityFromModal(false)
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -108,7 +113,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             </label>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {(!selectedCity || (!selectedCity && !searchQuery)) &&
+            {((!selectedCity || (!selectedCity && !searchQuery)) && !isChosenCityFromModal) &&
                 <ul className="search-results" style={{ border: results.length !== 0 ? '2px solid #ccc' : '' }}>
                     {results.map((item, index) => (
                         item && <li

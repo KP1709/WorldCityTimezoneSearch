@@ -9,6 +9,7 @@ import { getCountryRegionCities } from '../hooks/findCity/getCountryRegionsCitie
 import { useSelectedCity } from '../hooks/findCity/useSelectedCity';
 import { useFlagCodes } from '../hooks/useFlagCodes';
 import { getRegionFullName } from '../hooks/getFullRegionName';
+import { ChosenCityFromModalContext, type ChosenCityFromModalContextType } from '../context/ChosenCityFromModalContext';
 
 type CountryPaneType = {
     setSelectedCountry: (value: string) => void
@@ -112,6 +113,8 @@ const CountryRegionCitiesPane = ({ selectedCountry, selectedRegion, setSelectedC
 
 const FindCityModal = ({ setToggle, setSelectedCity }: { setToggle: (value: boolean) => void, setSelectedCity: (value: CitiesType | null) => void }) => {
     const { setSearchQuery } = useContext(SearchQueryContext) as SearchQueryContextType
+    const { setIsChosenCityFromModal } = useContext(ChosenCityFromModalContext) as ChosenCityFromModalContextType
+
 
     const [selectedCountry, setSelectedCountry] = useState('')
     const [selectedRegion, setSelectedRegion] = useState('')
@@ -121,6 +124,7 @@ const FindCityModal = ({ setToggle, setSelectedCity }: { setToggle: (value: bool
         if (selectedCityName) {
             setToggle(false)
             setSearchQuery(selectedCityName)
+            setIsChosenCityFromModal(true)
         }
     }, [selectedCityName])
 

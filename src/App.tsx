@@ -4,11 +4,12 @@ import type { CitiesType } from './types'
 import Map, { RecentreButton, SearchListButton, ThemeToggleButton } from './components/map'
 import Card from './components/card'
 import ReloadModal from './components/reloadModal'
+import FindCityModal from './components/FindCityModal'
 import { RecentreContext } from './context/RecentreContext'
 import { DarkModeContext } from './context/DarkModeContext'
 import { CardExpandedContext } from './context/CardExpandedContext'
-import FindCityModal from './components/FindCityModal'
 import { SearchQueryContext } from './context/SearchQueryContext'
+import { ChosenCityFromModalContext } from './context/ChosenCityFromModalContext'
 
 function App() {
   const [chosenCity, setChosenCity] = useState<CitiesType | null>(null)
@@ -20,6 +21,7 @@ function App() {
   });
   const [reloadRequired, setReloadRequired] = useState(false)
   const [isCardExpanded, setIsCardExpanded] = useState(false)
+  const [isChosenCityFromModal, setIsChosenCityFromModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleCitySelect = (cities: CitiesType) => {
@@ -30,6 +32,7 @@ function App() {
   const darkModeProvider = useMemo(() => ({ darkMode, setDarkMode }), [darkMode])
   const cardExpandedProvider = useMemo(() => ({ isCardExpanded, setIsCardExpanded }), [isCardExpanded])
   const searchQueryProvider = useMemo(() => ({ searchQuery, setSearchQuery }), [searchQuery])
+  const chosenCityFromModalProvider = useMemo(() => ({ isChosenCityFromModal, setIsChosenCityFromModal }), [isChosenCityFromModal])
 
   const [toggleCityModal, setToggleCityModal] = useState(false)
 
@@ -39,10 +42,12 @@ function App() {
         {reloadRequired && <ReloadModal setReloadRequired={setReloadRequired} />}
         <SearchListButton setToggle={setToggleCityModal} toggle={toggleCityModal} />
 
-        <SearchQueryContext.Provider value={searchQueryProvider}>
-          {toggleCityModal && <FindCityModal setToggle={setToggleCityModal} setSelectedCity={setChosenCity} />}
-          <SearchBar onSelect={handleCitySelect} />
-        </SearchQueryContext.Provider>
+        <ChosenCityFromModalContext.Provider value={chosenCityFromModalProvider}>
+          <SearchQueryContext.Provider value={searchQueryProvider}>
+            {toggleCityModal && <FindCityModal setToggle={setToggleCityModal} setSelectedCity={setChosenCity} />}
+            <SearchBar onSelect={handleCitySelect} />
+          </SearchQueryContext.Provider>
+        </ChosenCityFromModalContext.Provider>
         <ThemeToggleButton setReloadRequired={setReloadRequired} />
 
         <CardExpandedContext.Provider value={cardExpandedProvider}>
