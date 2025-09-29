@@ -59,7 +59,9 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             }
         };
 
-        fetchResults()
+        if (!isChosenCityFromModal) {
+            fetchResults()
+        }
     }, [debouncedQuery]);
 
     const handleSelect = (item: CitiesType) => {
@@ -113,7 +115,7 @@ const SearchBar = ({ onSelect }: SearchBarProps) => {
             </label>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {((!selectedCity || (!selectedCity && !searchQuery)) && !isChosenCityFromModal) &&
+            {((!selectedCity || (!selectedCity && !searchQuery))) &&
                 <ul className="search-results" style={{ border: results.length !== 0 ? '2px solid #ccc' : '' }}>
                     {results.map((item, index) => (
                         item && <li
