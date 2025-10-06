@@ -67,11 +67,13 @@ function TimeCardInfo({ chosenCity, markerTimeData }: { chosenCity: CitiesType, 
             <span id='date'><TimeDate timezone={timezone} time={false} /> </span>
             <span id='timezone-id'><p>{DateTime.now().setZone(timezone).toFormat('ZZZZZ') ?? null}</p></span>
             <span id='timezone-name'><p>{timezone}</p></span>
-            <span id='longitude'>
-                <div><p>Lng: {Number(latLng[1]).toFixed(3)}</p></div>
+            <span id='long-lat'>
+                <div className='flex-row'>
+                    <p>Lng: {Number(latLng[1]).toFixed(3)}</p>
+                    <p>Lat: {Number(latLng[0]).toFixed(3)}</p>
+                </div>
             </span>
 
-            <span id='latitude'><div><p>Lat: {Number(latLng[0]).toFixed(3)}</p></div></span>
             <span id='location'><p>{ascii_name}, {regionName && `${regionName},`} {country_name_en || countryName}</p></span>
             <span id='flags'>
                 <div className='flex-row'>

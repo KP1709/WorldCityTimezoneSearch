@@ -100,14 +100,9 @@
     grid-row: 6;
 }
 
-#longitude {
+#long-lat {
     grid-row: 5;
-    grid-column: 1;
-}
-
-#latitude {
-    grid-row: 5;
-    grid-column: 2;
+    grid-column: 1 / -1;
 }
 
 #flags {
