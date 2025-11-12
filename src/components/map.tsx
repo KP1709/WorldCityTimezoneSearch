@@ -17,7 +17,10 @@ export const SearchListButton = ({ setToggle, toggle }: { setToggle: (value: boo
     const currentBreakpoint = useBreakpoint()
 
     return (
-        <button id={currentBreakpoint <= 500 ? 'search-btn-sm' : 'search-btn-lg'} className='search-btn' onClick={() => setToggle(!toggle)}>
+        <button id={currentBreakpoint <= 500 ? 'search-btn-sm' : 'search-btn-lg'}
+            className='search-btn'
+            onClick={() => setToggle(!toggle)}
+            title='Search by country and region'>
             <img src={searchList} alt='Find by country and region' />
         </button>
     )
@@ -28,7 +31,10 @@ export const RecentreButton = () => {
     const { recentre, setRecentre } = useContext(RecentreContext) as RecentreContextType;
 
     return (
-        <button id={currentBreakpoint <= 500 ? 'recentre-btn-sm' : 'recentre-btn-lg'} className='recentre-btn' onClick={() => setRecentre(!recentre)}>
+        <button id={currentBreakpoint <= 500 ? 'recentre-btn-sm' : 'recentre-btn-lg'}
+            className='recentre-btn'
+            onClick={() => setRecentre(!recentre)}
+            title='Recentre map'>
             <img src={gpsFix} alt='Recentre Map' />
         </button>
     )
@@ -46,7 +52,8 @@ export const ThemeToggleButton = ({ setReloadRequired }: { setReloadRequired: (v
         <button
             id={currentBreakpoint <= 500 ? 'theme-btn-sm' : 'theme-btn-lg'}
             className='theme-btn'
-            onClick={() => { setDarkMode(!darkMode), setReloadRequired(true) }}>
+            onClick={() => { setDarkMode(!darkMode), setReloadRequired(true) }}
+            title='Change theme'>
             <img src={darkMode ? lightTheme : darkTheme} alt='Change dark/light mode' />
         </button>
     )
@@ -108,9 +115,7 @@ export default function Map({ chosenCity }: { chosenCity?: CitiesType | null }) 
             zoom={2}
             minZoom={2}
             scrollWheelZoom={true}
-            zoomControl={false}
-
-        >
+            zoomControl={false}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
